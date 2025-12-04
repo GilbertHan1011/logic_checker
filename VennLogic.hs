@@ -1,4 +1,4 @@
-module Logic where
+module VennLogic where
 
 import Data.List (subsequences, nub)
 
