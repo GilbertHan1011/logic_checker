@@ -8,6 +8,27 @@ import Data.Char (toLower)
 data Quantifier = QEvery | QSome | QNo | QSomeNot
   deriving (Show, Eq)
 
+data Expr
+  = Atom String
+  |Not Expr
+  |And Expr Expr
+  |Or Expr Expr
+  |Implies Expr Expr
+  deriving (Eq)
+
+instance Show Expr where
+  show (Atom s) = s
+  show (Not e) = "~" ++ show e
+  show (And e1 e2) = "(" ++ show e1 ++ " & " ++ show e2 ++ ")"
+  show (Or e1 e2) = "(" ++ show e1 ++ " | " ++ show e2 ++ ")"
+  show (Implies e1 e2) = "(" ++ show e1 ++ " -> " ++ show e2 ++ ")"
+
+data Sequent = Sequent
+  {
+    left :: [Expr]
+    , right :: [Expr]
+  } deriving Show
+
 -- Simple three-term input: quantifier + subject + predicate
 -- Subject / predicate are restricted to 'A', 'B', 'C'.
 data InputForm = InputForm
@@ -15,6 +36,7 @@ data InputForm = InputForm
   , subjectVar :: Char
   , predicateVar :: Char
   } deriving (Show, Eq)
+
 
 -- Pretty-print helper
 showInputForm :: InputForm -> String
